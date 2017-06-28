@@ -9,15 +9,17 @@
 				<el-tabs type="border-card">
 				  <el-tab-pane label="点评" >
 				  	<ul class="index-dianping">
-				  		<li class="dianping" v-for="(item,index) in list">
-				  			<p class="dianping-title">{{item.hourseName}}<span> {{item.hourseNo}}</span><span></span></p>
-				  			<p class="dianping-info" style="margin-top: 20px;">地址: {{item.addr}}</p>
-				  			<p class="dianping-info">点评: {{item.discuzzList[0].descri}}</p>
-				  			<ul class="dianping-pic clearfix">
-				  				<li v-for="(items,index) in item.imageList" style="">
-				  					<img :src="urls+items.path"/>
-				  				</li>
-				  			</ul>
+			  			<li class="dianping" v-for="(item,index) in list">
+			  				<router-link :to="{path:'detiles',query: {}}">
+					  			<p @click="setitem(item)" class="dianping-title">{{item.hourseName}}<span> {{item.hourseNo}}</span><span></span></p>
+					  			<p class="dianping-info" style="margin-top: 20px;">地址: {{item.addr}}</p>
+					  			<p class="dianping-info">点评: {{item.discuzzList[0].descri}}</p>
+					  			<ul class="dianping-pic clearfix">
+					  				<li v-for="(items,index) in item.imageList" style="">
+					  					<img :src="urls+items.path"/>
+					  				</li>
+					  			</ul>
+					  		</router-link>
 				  		</li>
 				  	</ul>
 				  </el-tab-pane>
@@ -58,7 +60,7 @@
 			});
 		},
 		methods:{
-			setitems(item){
+			setitem(item){
 				sessionStorage.setItem("item",JSON.stringify(item));
 			}
 		},
