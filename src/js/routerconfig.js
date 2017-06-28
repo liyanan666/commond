@@ -4,6 +4,7 @@ import Vue from 'vue'
 import index from '../components/index/index.vue'
 import comments from '../components/comment/comment.vue'
 import feedback from '../components/feedback/feedback.vue'
+import search from '../components/search/search.vue'
 
 Vue.use(VueRouter);
 //配置路由
@@ -19,6 +20,10 @@ const routes = [
 	{
 		path:'/feedback',
 		component: feedback,
+	},	
+	{
+		path:'/search',
+		component: search,
 	},	
 //	{
 //		path: '/comment',

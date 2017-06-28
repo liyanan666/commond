@@ -83,7 +83,6 @@
 		color: #000;
 	}
 	.el-tabs__item.is-active {
-		border-top: 1px solid #7cb226;
 		color: #7cb226;
 	}
 	.el-tabs__nav{
