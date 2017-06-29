@@ -2,7 +2,7 @@
 	<div>
 		<div class="search">
 			<el-input v-model="userinput" style="width:640px;" size="large" placeholder=""></el-input>
-			<el-button @click="getinfo" size="large" type="primary" style="width: 100px;">搜索</el-button>
+			<el-button @click="getinfo(userinput,0,0)" size="large" type="primary" style="width: 100px;">搜索</el-button>
 			<span class="senddianping">发表点评</span>
 		</div>
 		<div class="nav1">
@@ -25,7 +25,7 @@
 										</li>
 									</ul>
 									<div class="page" v-show="arr">
-										<el-pagination  @current-change="handleCurrentChange" :current-page.sync="currentPage1" :page-size="100" layout=" prev, pager, next" :total="1000">
+										<el-pagination  @current-change="handleCurrentChange" :current-page.sync="currentPage1" :page-size="10" layout=" prev, pager, next" :total="totalpage">
 										</el-pagination>
 									</div>
 								</div>
@@ -40,7 +40,7 @@
 								</div>
 							</div>
 						</el-tab-pane>
-						<el-tab-pane label="视频" name="second">视频</el-tab-pane>
+						<el-tab-pane label="视频" name="second">{{keyword}}</el-tab-pane>
 						<el-tab-pane label="套利" name="third">套利</el-tab-pane>
 					</el-tabs>
 				</template>
@@ -59,12 +59,14 @@
 				arr: '',
 				index: 0,
 				currentPage1: 1,
-				newcommonds:''
+				newcommonds:'',
+				keyword:'',
+				totalpage:''
 			};
 		},
 		created: function() {
 			this.userinput = this.$route.query.id;
-			this.getinfo();
+			this.getinfo(this.userinput,0,0);
 			axios.get('http://test.yanfumall.com/jdj-wx/wxweb/getDiscuzzList.do?start=0&pageSize=5', {
 			})
 			.then((data) => {
@@ -82,7 +84,7 @@
 				console.log(tab, event);
 			},
 			filter(value) {
-				var userinput = this.userinput
+				var userinput = this.keyword
 				if(userinput == '') {
 					return value;
 				} else if(!value) {
@@ -92,18 +94,22 @@
 				var result = value.replace(reg, "<span style='color:#F00;font-weight:700;'>" + userinput + "</span>");
 				return result;
 			},
-			getinfo() {
+			getinfo(keyword,index,ispage) {
+				var This = this;
+				if(ispage == 0){
+					this.currentPage1 = 1;
+				}
 				axios.get('http://test.yanfumall.com/jdj-wx/wxweb/getHourseDiscuzzList.do', {
 					params: {
-						keyword: this.userinput,
-						start: this.index,
+						keyword:keyword,
+						start: index,
 						pageSize: 10
 					}
 				})
 				.then((data) => {
-					this.arr = data.data.data;
-					console.log(data.data.data);
-
+					This.arr = data.data.data.hourseDiscuzzList;
+					This.keyword = data.data.data.keyword;
+					This.totalpage = data.data.data.totalSize;
 				})
 				.catch((error) => {
 					console.log(error);
@@ -111,8 +117,7 @@
 			},
 			handleCurrentChange(val) {
 				this.index = val;
-				this.getinfo();
-
+				this.getinfo(this.keyword,this.index,1);
 			}
 		}
 	}
