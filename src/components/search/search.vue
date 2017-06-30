@@ -122,7 +122,7 @@
 			<div style="padding-left: 20px;margin: 20px 0;">
 				<p style="color: #a0a0a0;margin-bottom: 20px;">上传图片（可选）：</p>
 				<div>
-					<a href="javascript:;" class="file">选择文件
+					<a href="javascript:;" class="file">
 					    <input type="file" name="" id="" @change="uploadpic($event)">
 					</a>
 				</div>
@@ -289,7 +289,7 @@
 					    	var odiv = document.createElement("div");
 					    	odiv.setAttribute('class','divpic');
 					    	odiv.style.background = "url("+This.axiosurl+""+res.data+") no-repeat" ;
-					    	odiv.style.backgroundSize = "contain";
+					    	odiv.style.backgroundSize = "cover";
 					    	This.uploadimg.push(res.data);
 					    	console.log(This.uploadimg);
 					    	e.path[2].prepend(odiv);
@@ -500,8 +500,9 @@
 	.file {
 	    position: relative;
 	    display: inline-block;
-	    background: #D0EEFF;
-	    border: 1px solid #99D3F5;
+	    background: url(../../img/upload.png) no-repeat;
+	    background-size: cover;
+	    border: 1px solid #e7e7e7;
 	    border-radius: 4px;
 	    width: 100px;
 	    overflow: hidden;
@@ -518,12 +519,6 @@
 	    right: 0;
 	    top: 0;
 	    opacity: 0;
-	}
-	.file:hover {
-	    background: #AADFFD;
-	    border-color: #78C3F3;
-	    color: #004974;
-	    text-decoration: none;
 	}
 	.divpic{
 		width: 100px;
