@@ -24,9 +24,6 @@
 					<p><span>房号 : </span>{{item.hourseNo}}</p>
 					<p><span>楼层 : </span>{{item.floor}}</p>
 					<p><span>房东 : </span>{{item.host}}</p>
-					<div class="btn" @click="showdialog">
-						发表评论
-					</div>
 				</div>
 				
 				<div class="about">

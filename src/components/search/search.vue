@@ -29,13 +29,14 @@
 										</el-pagination>
 									</div>
 								</div>
+								<div class="fl" style="height: 300px;width: 1px;background: #e7e7e7;margin: 0 10px;"></div>
 								<div class="conmond-r fr">
-									<p>最新员工评论</p>
-									<ul>
-										<li></li>
-										<li></li>
-										<li></li>
-										<li></li>
+									<p style="font-size: 18px;text-align: center;color: #999;">最新员工评论</p>
+									<ul style="margin-top: 10px;">
+										<li v-for="(item,index) in newcommonds" style="border-bottom: 1px solid #eee;padding: 20px 0;">
+											<p style="font-size: 16px;line-height: 20px;margin-left: 10px;color: #7a7a7a;">”{{item.descri}}”</p>
+											<p style="margin: 10px 20px 0px 30px;">----微信用户</p>
+										</li>
 									</ul>
 								</div>
 							</div>
@@ -89,13 +90,25 @@
 					<span>楼层 ：<el-input style="display: inline-block;width: 70px;" v-model="floor" placeholder=""></el-input></span></span>
 				</div>
 				<div class="dia-info-n">
-					<span style="flex: 1.5;">是否合租 ：<el-input style="display: inline-block;width: 70px;" v-model="isSharedRoom" placeholder=""></el-input></span>
-					<span style="flex: 2;">是否二手房东 ：<el-input style="display: inline-block;width: 70px;" v-model="isSecondLandlord" placeholder=""></el-input></span>
+					<span style="flex: 1.5;">是否合租 ：
+						<select name="" id="" v-model="isSharedRoom">
+							<option value="0">不是</option>
+							<option value="1">是</option>
+						</select>
+					</span>
+					<span style="flex: 2;">是否二手房东 ：
+						<select name="" id="" v-model="isSecondLandlord">
+							<option value="0">不是</option>
+							<option value="1">是</option>
+						</select>
+					</span>
 					<span></span>
 					<span></span>
 				</div>
 			</div>
 			<div style="padding-left: 20px;padding-bottom: 40px;border-bottom: 1px solid #e7e7e7;">
+				<p style="color: #a0a0a0;margin-bottom: 20px;">评论标题：</p>
+				<div style="width: 500px;margin-bottom: 20px;"><el-input v-model="title" placeholder="请输入内容"></el-input></div>
 				<p style="color: #a0a0a0;margin-bottom: 20px;">评论内容：</p>
 				<div style="width: 500px;">
 					<el-input
@@ -112,17 +125,6 @@
 					<a href="javascript:;" class="file">选择文件
 					    <input type="file" name="" id="" @change="uploadpic($event)">
 					</a>
-					<!--<el-upload
-					  action="http://test.yanfumall.com/jdj-wx/wxweb/upload.do"
-					  list-type="picture-card"
-					  :data="form"
-					  :on-preview="handlePictureCardPreview"
-					  :on-remove="handleRemove">
-					  <i class="el-icon-plus"></i>
-					</el-upload>
-					<el-dialog v-model="dialogVisible" size="tiny">
-					  <img width="100%" :src="dialogImageUrl" alt="">
-					</el-dialog>-->
 				</div>
 				<p style="margin: 30px 0;"><span>手机 ：<el-input style="display: inline-block;width: 150px;" v-model="mobile" placeholder="请输入内容"></el-input></span><span style="margin-left: 20px;">QQ ：<el-input style="display: inline-block;width: 150px;" v-model="qq" placeholder="请输入内容"></el-input></span></p>
 				<p style="color: red;">*以上信息平台承诺绝对保密，联系方式用于咨询红包发放</p>
@@ -138,6 +140,7 @@
 	export default {
 		data() {
 			return {
+				axiosurl:'http://test.yanfumall.com/jdj-wx/',
 				userinput: '',
 				activeName: 'first',
 				arr: '',
@@ -146,6 +149,7 @@
 				newcommonds:'',
 				keyword:'',
 				totalpage:'',
+				addr:'', 
 				dialogTableVisible:false,
 				textarea3:'',
         		mobile:'',
@@ -156,19 +160,20 @@
         		hourseName:'',
         		floor:'',
         		rent:'',
+        		title:'',
         		isSecondLandlord:'',
         		hourseNo:'',
         		isSharedRoom:'',
         		dialogImageUrl: '',
         		dialogVisible: false,
-        		form:{}
+        		uploadimg:[]
         		
 			};
 		},
 		created: function() {
 			this.userinput = this.$route.query.id;
 			this.getinfo(this.userinput,0,0);
-			axios.get('http://test.yanfumall.com/jdj-wx/wxweb/getDiscuzzList.do?start=0&pageSize=5', {
+			axios.get(''+this.axiosurl+'wxweb/getDiscuzzList.do?start=0&pageSize=5', {
 			})
 			.then((data) => {
 				this.newcommonds = data.data.data;
@@ -200,7 +205,7 @@
 				if(ispage == 0){
 					this.currentPage1 = 1;
 				}
-				axios.get('http://test.yanfumall.com/jdj-wx/wxweb/getHourseDiscuzzList.do', {
+				axios.get(''+this.axiosurl+'wxweb/getHourseDiscuzzList.do', {
 					params: {
 						keyword:keyword,
 						start: index,
@@ -222,10 +227,11 @@
 			},
 			submit(){
 		    	var This = this;
-		    	axios.get('http://test.yanfumall.com/jdj-wx/wxweb/publicDiscuzz.do', {
+		    	var imgurl = This.uploadimg.join(',');
+		    	axios.get(''+this.axiosurl+'wxweb/publicDiscuzz.do', {
 				    params: {
 				      hourseName: This.hourseName,
-				      title:'',
+				      title:This.title,
 				      intro : 'XXX',
 				      desc : this.textarea3,
 				      host : This.host,
@@ -236,7 +242,7 @@
 				      city : This.city,
 				      isSecondLandlord : This.isSecondLandlord,
 				      qq : This.qq,
-				      imagesPath : '',
+				      imagesPath : imgurl,
 				      hourseNo : This.hourseNo,
 				      isSharedRoom : 0,
 				      addr : This.addr
@@ -263,6 +269,8 @@
 //		        this.dialogVisible = true;
 		    },
 		    uploadpic(e){
+		    	var This = this;
+		    	console.log(e);
 		    	var file = e.target.files[0]; 
 		    	if(window.FileReader){
 		    		var reader = new FileReader();
@@ -271,13 +279,20 @@
 		    			var formData = new FormData();
 		    			formData.append('file',file);
 		    			axios({
-					        url:'http://test.yanfumall.com/jdj-wx/wxweb/upload.do',
+					        url:''+This.axiosurl+'wxweb/upload.do',
 					        method:'post',
 					        data:formData,
 					        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 					    })
 		    			.then((res)=>{
-					    	console.log(res)
+		    				console.log(res.data);
+					    	var odiv = document.createElement("div");
+					    	odiv.setAttribute('class','divpic');
+					    	odiv.style.background = "url("+This.axiosurl+""+res.data+") no-repeat" ;
+					    	odiv.style.backgroundSize = "contain";
+					    	This.uploadimg.push(res.data);
+					    	console.log(This.uploadimg);
+					    	e.path[2].prepend(odiv);
 					    })
 
 		    		}
@@ -322,7 +337,7 @@
 	}
 	
 	.conmond-r {
-		width: 300px;
+		width: 260px;
 	}
 	
 	.oli {
@@ -437,10 +452,11 @@
 	.dia-city{
 		padding: 20px;
 	}
-	.dia-city select{
-		width: 120px;
+	select{
+		width: 80px;
 		height: 35px;
 		font-size: 18px;
+		border-radius: 4px;
 		border: 1px solid #bfcbd9;
 	}
 	.dia-city-c{
@@ -487,12 +503,14 @@
 	    background: #D0EEFF;
 	    border: 1px solid #99D3F5;
 	    border-radius: 4px;
-	    padding: 4px 12px;
+	    width: 100px;
 	    overflow: hidden;
 	    color: #1E88C7;
 	    text-decoration: none;
 	    text-indent: 0;
-	    line-height: 20px;
+	    line-height: 100px;
+	    text-align: center;
+	    height: 100px;
 	}
 	.file input {
 	    position: absolute;
@@ -506,5 +524,12 @@
 	    border-color: #78C3F3;
 	    color: #004974;
 	    text-decoration: none;
+	}
+	.divpic{
+		width: 100px;
+		height: 100px;
+		margin-right: 20px;
+		border-radius: 4px;
+		display: inline-block;
 	}
 </style>
