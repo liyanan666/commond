@@ -15,7 +15,7 @@
 					  			<p class="dianping-info" style="margin-top: 20px;">地址: {{item.addr}}</p>
 					  			<p class="dianping-info">点评: {{item.discuzzList[0].descri}}</p>
 					  			<ul class="dianping-pic clearfix">
-					  				<li v-for="(items,index) in item.imageList" style="">
+					  				<li v-show="item.imageList[0].path != ''" v-for="(items,index) in item.imageList" style="">
 					  					<img :src="urls+items.path"/>
 					  				</li>
 					  			</ul>
