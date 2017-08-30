@@ -140,7 +140,7 @@
 	export default {
 		data() {
 			return {
-				axiosurl:'http://test.yanfumall.com/jdj-wx/',
+				
 				userinput: '',
 				activeName: 'first',
 				arr: '',
@@ -173,7 +173,7 @@
 		created: function() {
 			this.userinput = this.$route.query.id;
 			this.getinfo(this.userinput,0,0);
-			axios.get(''+this.axiosurl+'wxweb/getDiscuzzList.do?start=0&pageSize=5', {
+			axios.get(''+this.GLOBAL.host+'/wxweb/getDiscuzzList.do?start=0&pageSize=5', {
 			})
 			.then((data) => {
 				this.newcommonds = data.data.data;
@@ -205,7 +205,7 @@
 				if(ispage == 0){
 					this.currentPage1 = 1;
 				}
-				axios.get(''+this.axiosurl+'wxweb/getHourseDiscuzzList.do', {
+				axios.get(''+this.GLOBAL.host+'/wxweb/getHourseDiscuzzList.do', {
 					params: {
 						keyword:keyword,
 						start: index,
@@ -228,7 +228,7 @@
 			submit(){
 		    	var This = this;
 		    	var imgurl = This.uploadimg.join(',');
-		    	axios.get(''+this.axiosurl+'wxweb/publicDiscuzz.do', {
+		    	axios.get(''+this.GLOBAL.host+'/wxweb/publicDiscuzz.do', {
 				    params: {
 				      hourseName: This.hourseName,
 				      title:This.title,
@@ -279,7 +279,7 @@
 		    			var formData = new FormData();
 		    			formData.append('file',file);
 		    			axios({
-					        url:''+This.axiosurl+'wxweb/upload.do',
+					        url:''+This.GLOBAL.host+'/wxweb/upload.do',
 					        method:'post',
 					        data:formData,
 					        headers: {'Content-Type': 'application/x-www-form-urlencoded'}

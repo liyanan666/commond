@@ -43,7 +43,7 @@
 		props:['info'],
 		methods:{
 			submitcommond(){
-				axios.get('http://test.yanfumall.com/jdj-wx/wxweb/publicDiscuzz.do?title=九亭地铁站1号口附近，大约500米左右，房东有点坑，二手房东&intro=xxx&rent=1700&mobile=18616122669&isSecondLandlord=1',{
+				axios.get(''+this.GLOBAL.host+'/wxweb/publicDiscuzz.do?title=九亭地铁站1号口附近，大约500米左右，房东有点坑，二手房东&intro=xxx&rent=1700&mobile=18616122669&isSecondLandlord=1',{
 					params:{
 						hourseName:this.info.hourseName,
 						desc:this.textarea,

@@ -45,7 +45,7 @@
 			}
 		},
 		mounted(){
-			axios.get('http://test.yanfumall.com/jdj-wx/wxweb/getHourseList.do', {
+			axios.get(''+this.GLOBAL.host+'/wxweb/getHourseList.do', {
 			    params: {
 			      start: 0,
 			      pageSize:8
